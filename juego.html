@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Blanquiazul - Alianza Lima (2005-2025)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), 
+                              url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Estadio_Alejandro_Villanueva_2018.jpg/1200px-Estadio_Alejandro_Villanueva_2018.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .pregunta-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 38, 84, 0.3);
+            margin-bottom: 25px;
+            text-align: center;
+            border-left: 5px solid #002654;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        h2 {
+
+            color: #333;
+
+        }
+
+        .alternativas {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin-bottom: 15px;
+
+        }
+
+        .alternativas li {
+
+            margin-bottom: 10px;
+
+        }
+
+        .alternativa-boton {
+            padding: 12px 20px;
+            background-color: #002654; /* Azul de Alianza Lima */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 350px;
+            display: block;
+            margin: 0 auto;
+            text-align: left;
+            border-left: 3px solid #ffffff;
+        }
+
+        .alternativa-boton:hover {
+            background-color: #0046ad;
+            transform: translateX(5px);
+        }
+
+        .alternativa-boton:disabled {
+
+            background-color: #ccc;
+
+            cursor: not-allowed;
+
+            color: #666;
+
+        }
+
+        #resultado {
+
+            margin-top: 15px;
+
+            font-weight: bold;
+
+        }
+
+        .correcto {
+
+            color: green;
+
+        }
+
+        .incorrecto {
+
+            color: red;
+
+        }
+
+        .reintentar-container {
+
+            margin-top: 15px;
+
+        }
+
+        .reintentar-container button {
+            background-color: #dc3545;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reintentar-container button:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+        
+        .club-logo {
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        h1 {
+            color: #002654;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+        
+        h2 {
+            color: #002654;
+            font-size: 1.4em;
+            border-bottom: 2px solid #002654;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .correcto {
+            color: #28a745;
+            font-size: 1.2em;
+            animation: fadeIn 0.5s;
+        }
+        
+        .incorrecto {
+            color: #dc3545;
+            font-size: 1.2em;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #002654;
+            font-size: 0.9em;
+            width: 100%;
+        }
+        
+        .menu-button {
+            padding: 12px 25px;
+            background-color: #002654; /* Azul de Alianza Lima */
+            color: white;
+            border: 2px solid #ffffff; /* Borde blanco */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-button:hover {
+            background-color: #0046ad; /* Azul más claro al pasar el cursor */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>TRIVIA BLANQUIAZUL<br><span style="font-size: 0.8em;">Preguntas sobre Alianza Lima (2005-2025)</span></h1>
+    
+    <div class="club-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Escudo_del_Club_Alianza_Lima.svg/800px-Escudo_del_Club_Alianza_Lima.svg.png" alt="Escudo Alianza Lima" width="120">
+    </div>
+
+
+
+    <div id="juego-container">
+
+        <div id="pregunta-container" class="pregunta-container">
+
+            <h2 id="pregunta-texto"></h2>
+
+            <ul id="alternativas-lista" class="alternativas">
+
+                </ul>
+
+            <div id="resultado"></div>
+
+            <div id="reintentar-container" style="display:none;">
+
+                <button onclick="reiniciarJuego()">Volver a Intentar</button>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    <a href="index.html" class="menu-button">⚽ Volver al Menú Principal ⚽</a>
+    
+    <div class="footer">
+        <p>¡Alianza Lima - El Equipo del Pueblo! | Estadio Alejandro Villanueva "Matute"</p>
+    </div>
+
+
+
+    <script>
+
+        const preguntas = [
+
+            {
+
+                pregunta: "¿Quiénes fueron dos delanteros que probablemente fueron titulares de Alianza Lima en la temporada 2005?",
+
+                alternativas: ["Claudio Pizarro y Jefferson Farfán", "Flavio Maestri y Waldir Sáenz", "José Carlos Fernández y Roberto Silva", "Wilmer Aguirre y Juan Diego Gonzales-Vigil"],
+
+                respuestaCorrecta: "Flavio Maestri y Waldir Sáenz"
+
+            },
+
+            {
+
+                pregunta: "¿Qué defensor formó parte del plantel de Alianza Lima durante la temporada 2010?",
+
+                alternativas: ["Carlos Zambrano", "Walter Ibáñez", "Alberto Rodríguez", "Christian Ramos"],
+
+                respuestaCorrecta: "Walter Ibáñez"
+
+            },
+
+            {
+
+                pregunta: "¿Qué número de camiseta usó el extremo Wilmer Aguirre durante su paso por Alianza Lima en la temporada 2010?",
+
+                alternativas: ["Número 7", "Número 11", "Número 15", "Número 19"],
+
+                respuestaCorrecta: "Número 15"
+
+            },
+
+            {
+
+                pregunta: "¿Qué jugador es recordado por haber sido capitán de Alianza Lima en la temporada 2017?",
+
+                alternativas: ["Leao Butrón", "Luis Aguiar", "Rinaldo Cruzado", "Germán Pacheco"],
+
+                respuestaCorrecta: "Leao Butrón"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál de los siguientes porteros formó parte del plantel de Alianza Lima en 2021?",
+
+                alternativas: ["Pedro Gallese", "Ángelo Campos", "José Carvallo", "Ricardo Farro"],
+
+                respuestaCorrecta: "Ángelo Campos"
+
+            },
+
+            {
+
+                pregunta: "¿Qué jugador se unió a Alianza Lima en la temporada 2007 proveniente de qué club?",
+
+                alternativas: ["Johan Fano / Universitario de Deportes", "Jefferson Farfán / PSV Eindhoven", "Donny Neyra / Cienciano", "Hernán Barcos / LDU Quito"],
+
+                respuestaCorrecta: "Donny Neyra / Cienciano"
+
+            },
+
+            {
+
+                pregunta: "¿Qué jugador dejó Alianza Lima en la temporada 2012 y a qué club se fue?",
+
+                alternativas: ["Paolo Guerrero / Corinthians", "Claudio Pizarro / Bayern Munich", "José Carlos Fernández / Sporting Cristal", "Luis Trujillo / Juan Aurich"],
+
+                respuestaCorrecta: "José Carlos Fernández / Sporting Cristal"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál de las siguientes fue una transferencia destacada de Alianza Lima en el año 2015?",
+
+                alternativas: ["La llegada de Paolo Hurtado", "La salida de André Carrillo", "El regreso de Carlos Ascues", "La contratación de Irven Ávila"],
+
+                respuestaCorrecta: "El regreso de Carlos Ascues"
+
+            },
+
+            {
+
+                pregunta: "¿Qué jugador extranjero salió de Alianza Lima durante la temporada 2019?",
+
+                alternativas: ["Mauricio Affonso", "Janio Pósito", "Alejandro Hohberg", "Cristian Zúñiga"],
+
+                respuestaCorrecta: "Janio Pósito"
+
+            },
+
+            {
+
+                pregunta: "¿Qué delantero uruguayo fue una incorporación importante para Alianza Lima en la temporada 2023?",
+
+                alternativas: ["Paolo Guerrero", "Christian Cueva", "Gabriel Costa", "André Carrillo"],
+
+                respuestaCorrecta: "Gabriel Costa"
+
+            },
+
+            {
+
+                pregunta: "¿Quién fue el entrenador de Alianza Lima durante la temporada 2006?",
+
+                alternativas: ["Gustavo Costas", "José Soto", "Franco Navarro", "Wilmar Valencia"],
+
+                respuestaCorrecta: "José Soto"
+
+            },
+
+            {
+
+                pregunta: "¿En qué año dirigió Miguel Ángel Arrué al Club Alianza Lima?",
+
+                alternativas: ["2005", "2007", "2009", "2011"],
+
+                respuestaCorrecta: "2007"
+
+            },
+
+            {
+
+                pregunta: "¿Cuántas veces se consagró campeón nacional el Club Alianza Lima entre los años 2010 y 2020 (inclusive)?",
+
+                alternativas: ["1 vez (2017)", "2 veces (2017, 2020)", "3 veces", "Nunca"],
+
+                respuestaCorrecta: "1 vez (2017)"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál fue una posible posición de Alianza Lima en la tabla de posiciones al final de la temporada 2008?",
+
+                alternativas: ["Primer lugar", "Quinto lugar", "Décimo quinto lugar", "Último lugar"],
+
+                respuestaCorrecta: "Quinto lugar"
+
+            },
+
+            {
+
+                pregunta: "¿Quién probablemente fue el máximo goleador de Alianza Lima jugando como extremo en la temporada 2014?",
+
+                alternativas: ["Mauro Guevgeozián", "Lionard Pajoy", "Víctor Cedrón", "Carlos Preciado"],
+
+                respuestaCorrecta: "Mauro Guevgeozián"
+
+            },
+
+            {
+
+                pregunta: "¿En qué temporada Alianza Lima probablemente tuvo una alta cantidad de partidos ganados?",
+
+                alternativas: ["2011", "2017", "2015", "2013"],
+
+                respuestaCorrecta: "2017"
+
+            },
+
+            {
+
+                pregunta: "¿Qué acontecimiento especial conmemoró el Club Alianza Lima durante el año 2001?",
+
+                alternativas: ["La inauguración de su estadio propio.", "El centenario de su fundación.", "Un campeonato nacional invicto.", "El retiro de un jugador histórico."],
+
+                respuestaCorrecta: "El centenario de su fundación."
+
+            },
+
+            {
+
+                pregunta: "¿Qué encuentro reciente entre Alianza Lima y Sporting Cristal tuvo un resultado inesperado o una actuación individual destacada que cambió el curso del partido?",
+
+                alternativas: ["Un empate sin goles en la fase regular.", "Una victoria ajustada por 1-0 en los minutos finales.", "Una victoria de Alianza Lima con un gol de tiro libre en el último minuto por un jugador poco habitual.", "Un partido con pocos goles y mucha táctica."],
+
+                respuestaCorrecta: "Una victoria ajustada por 1-0 en los minutos finales."
+
+            },
+
+            {
+
+                pregunta: "¿Cuál de los siguientes canteranos de Alianza Lima probablemente debutó y tuvo un impacto significativo en la temporada 2016 o 2017?",
+
+                alternativas: ["Paolo Hurtado", "Sergio Peña", "Kevin Quevedo", "Wilder Cartagena"],
+
+                respuestaCorrecta: "Kevin Quevedo"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál es el apodo más conocido del club Alianza Lima?",
+
+                alternativas: ["Los Cremas", "Los Blanquiazules", "Los Celestes", "Los Rojos"],
+
+                respuestaCorrecta: "Los Blanquiazules"
+
+            },
+
+            {
+
+                pregunta: "¿Quién fue el director técnico de Alianza Lima que logró el campeonato nacional en 2017?",
+
+                alternativas: ["Guillermo Salas", "Pablo Bengoechea", "Gustavo Roverano", "Roberto Mosquera"],
+
+                respuestaCorrecta: "Pablo Bengoechea"
+
+            },
+
+            {
+
+                pregunta: "¿Qué defensor central argentino llegó a Alianza Lima para reforzar el equipo en la temporada 2018?",
+
+                alternativas: ["Carlos Zambrano", "Gonzalo Godoy", "Alberto Rodríguez", "Christian Ramos"],
+
+                respuestaCorrecta: "Gonzalo Godoy"
+
+            },
+
+            {
+
+                pregunta: "¿En qué estadio juega Alianza Lima sus partidos de local?",
+
+                alternativas: ["Estadio Nacional", "Estadio Monumental", "Estadio Alejandro Villanueva (Matute)", "Estadio San Martín de Porres"],
+
+                respuestaCorrecta: "Estadio Alejandro Villanueva (Matute)"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál fue el marcador global de la final del Campeonato Nacional 2017 que Alianza Lima ganó?",
+
+                alternativas: ["1-0", "2-1", "0-0 (Alianza ganó por mejor posición en la tabla)", "3-2"],
+
+                respuestaCorrecta: "2-1"
+
+            },
+
+            {
+
+                pregunta: "¿Qué marca deportiva vistió la camiseta de Alianza Lima durante la temporada 2015?",
+
+                alternativas: ["Nike", "Adidas", "Umbro", "Walon"],
+
+                respuestaCorrecta: "Umbro"
+
+            },
+
+            {
+
+                pregunta: "¿Qué delantero peruano tuvo un paso destacado por Alianza Lima a inicios de la década del 2000?",
+
+                alternativas: ["Paolo Guerrero", "Jefferson Farfán", "Claudio Pizarro", "Teófilo Cubillas"],
+
+                respuestaCorrecta: "Claudio Pizarro"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál fue el rival tradicional de Alianza Lima en el clásico del fútbol peruano?",
+
+                alternativas: ["Sporting Cristal", "Universitario de Deportes", "Deportivo Municipal", "Cienciano"],
+
+                respuestaCorrecta: "Universitario de Deportes"
+
+            },
+
+            {
+
+                pregunta: "¿Cuál ha sido la mejor actuación del Club Alianza Lima en la Copa Libertadores de América?",
+
+                alternativas: ["Campeón de la Copa Libertadores", "Subcampeón de la Copa Sudamericana", "Llegar a semifinales.", "Llegar a cuartos de final."],
+
+                respuestaCorrecta: "Llegar a semifinales."
+
+            },
+
+            {
+
+                pregunta: "¿Qué jugador extranjero se convirtió en un ídolo de la afición de Alianza Lima en los últimos 15 años?",
+
+                alternativas: ["Gabriel Costa", "Hernán Barcos", "Alejandro Hohberg", "Lionard Pajoy"],
+
+                respuestaCorrecta: "Hernán Barcos"
+
+            },
+
+            {
+
+                pregunta: "¿En qué año Alianza Lima descendió de categoría en el fútbol peruano?",
+
+                alternativas: ["Nunca ha descendido", "2005", "2012", "2020"],
+
+                respuestaCorrecta: "2020"
+
+            }
+
+        ];
+
+
+
+        let preguntaActualIndex = 0;
+
+        const preguntaTextoElement = document.getElementById('pregunta-texto');
+
+        const alternativasListaElement = document.getElementById('alternativas-lista');
+
+        const resultadoDiv = document.getElementById('resultado');
+
+        const reintentarContainer = document.getElementById('reintentar-container');
+
+        const juegoContainer = document.getElementById('juego-container');
+
+        let respuestaSeleccionada = null; // Variable para rastrear la respuesta seleccionada
+
+
+
+        function mostrarPregunta() {
+
+            resultadoDiv.textContent = "";
+
+            reintentarContainer.style.display = "none";
+
+            alternativasListaElement.innerHTML = "";
+
+            respuestaSeleccionada = null; // Resetear la respuesta seleccionada al mostrar una nueva pregunta
+
+
+
+            if (preguntaActualIndex < preguntas.length) {
+
+                const preguntaActual = preguntas[preguntaActualIndex];
+
+                preguntaTextoElement.textContent = preguntaActual.pregunta;
+
+
+
+                preguntaActual.alternativas.forEach(alternativa => {
+
+                    const li = document.createElement('li');
+
+                    const button = document.createElement('button');
+
+                    button.textContent = alternativa;
+
+                    button.classList.add('alternativa-boton');
+
+                    button.onclick = () => verificarRespuesta(alternativa);
+
+                    button.disabled = (respuestaSeleccionada !== null); // Deshabilitar si ya se seleccionó una respuesta
+
+                    li.appendChild(button);
+
+                    alternativasListaElement.appendChild(li);
+
+                });
+
+            } else {
+
+                juegoContainer.innerHTML = '<h2>¡FELICIDADES BLANQUIAZUL!</h2><div class="celebration"><p style="font-size: 1.2em;">Has respondido todas las preguntas correctamente.</p><p>¡ARRIBA ALIANZA! ⚪🔵⚪</p><div style="margin: 20px;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Escudo_del_Club_Alianza_Lima.svg/800px-Escudo_del_Club_Alianza_Lima.svg.png" width="100" alt="Escudo Alianza Lima"></div></div>';
+
+            }
+
+        }
+
+
+
+        function verificarRespuesta(respuesta) {
+
+            if (respuestaSeleccionada === null) { // Solo permitir verificar si no se ha seleccionado una respuesta
+
+                respuestaSeleccionada = respuesta;
+
+                const respuestaCorrecta = preguntas[preguntaActualIndex].respuestaCorrecta;
+
+                const botones = alternativasListaElement.querySelectorAll('.alternativa-boton');
+
+
+
+                botones.forEach(button => {
+
+                    button.disabled = true; // Deshabilitar todos los botones después de la selección
+
+                });
+
+
+
+                if (respuesta === respuestaCorrecta) {
+
+                    resultadoDiv.textContent = "¡Correcto!";
+
+                    resultadoDiv.className = "correcto";
+
+                    preguntaActualIndex++;
+
+                    setTimeout(mostrarPregunta, 1500);
+
+                } else {
+
+                    resultadoDiv.textContent = "¡Incorrecto! ¿Quieres volver a intentarlo?";
+
+                    resultadoDiv.className = "incorrecto";
+
+                    reintentarContainer.style.display = "block";
+
+                }
+
+            }
+
+        }
+
+
+
+        function reiniciarJuego() {
+
+            preguntaActualIndex = 0;
+
+            mostrarPregunta();
+
+        }
+
+
+
+        // Mostrar la primera pregunta al cargar la página
+
+        mostrarPregunta();
+
+    </script>
+
+</body>
+
+</html>
